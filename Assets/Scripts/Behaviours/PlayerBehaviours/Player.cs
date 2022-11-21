@@ -1,37 +1,49 @@
-﻿using UnityEngine;
+﻿using Model;
+using UnityEngine;
 using Zenject;
 
-public class Player : MonoBehaviour
+namespace Behaviours.PlayerBehaviours
 {
-    [Inject(Id = "playerHealthCurrent")]
-    private int HealthCurrent { get; set; }
-
-    [Inject(Id = "playerHealthMax")]
-    private int HealthMax { get; set; }
-
-    [Inject(Id = "playerMana")]
-    private int Mana { get; set; }
-
-    [Inject]
-    private SignalBus SignalBus { get; set; }
-
-    private void Start()
+    public class Player : MonoBehaviour
     {
-        SignalBus.Fire(new UpdatePlayerHealthSignal() { healthCurrent = HealthCurrent, healthMax = HealthMax });
-    }
+        private PlayerModel _playerModel;
+        private SignalBus _signalBus;
 
-    public void ApplyDamage(ApplyPlayerDamageSignal signal)
-    {
-        HealthCurrent -= signal.damage;
-        SignalBus.Fire(new UpdatePlayerHealthSignal() { healthCurrent = HealthCurrent, healthMax = HealthMax });
-        if(HealthCurrent <= 0)
+        [Inject]
+        public void Initialize(PlayerModel playerModel, SignalBus signalBus)
         {
-            SignalBus.Fire(new PlayerDiedSignal());
+            _playerModel = playerModel;
+            _signalBus = signalBus;
         }
-    }
+    
+        private void Start()
+        {
+            _signalBus.Fire(new UpdatePlayerHealthSignal
+            {
+                healthCurrent = _playerModel.HealthCurrent, 
+                healthMax = _playerModel.HealthMax
+            });
+        }
 
-    public void ApplyHealing(int healing)
-    {
-        HealthCurrent += healing;
+        public void ApplyDamage(ApplyPlayerDamageSignal signal)
+        {
+            _playerModel.ApplyDamage(signal.damage);
+        
+            _signalBus.Fire(new UpdatePlayerHealthSignal
+            {
+                healthCurrent = _playerModel.HealthCurrent, 
+                healthMax = _playerModel.HealthMax
+            });
+        
+            if(_playerModel.HealthCurrent <= 0)
+            {
+                _signalBus.Fire(new PlayerDiedSignal());
+            }
+        }
+
+        public void ApplyHealing(int healing)
+        {
+            _playerModel.ApplyHealing(healing);
+        }
     }
 }

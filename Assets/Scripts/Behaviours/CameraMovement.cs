@@ -1,22 +1,23 @@
+using Behaviours.PlayerBehaviours;
 using UnityEngine;
 using Zenject;
 
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private float cameraSpeed;
-    private Transform player;
+    private Transform _player;
 
     [Inject]
-    private void Construct(PlayerMovementTargetValidator player)
+    private void Construct(Player player)
     {
-        this.player = player.transform;
+        _player = player.transform;
     }
 
     private void FixedUpdate()
     {
         if (IsCameraOnPlayer)
         {
-            var target = player.position;
+            var target = _player.position;
             target.y = transform.position.y;
             target.x += 13;
             target.z += 2;
@@ -24,5 +25,5 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    private bool IsCameraOnPlayer => player != null && Vector3.Distance(transform.position, player.position) > 0.5f;
+    private bool IsCameraOnPlayer => _player != null && Vector3.Distance(transform.position, _player.position) > 0.5f;
 }
