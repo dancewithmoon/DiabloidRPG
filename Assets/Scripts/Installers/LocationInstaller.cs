@@ -1,6 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using Behaviours.PlayerBehaviours;
 using Constants;
-using Controllers;
 using ScriptableObjects;
 using UnityEngine;
 using UserInput;
@@ -9,34 +9,47 @@ using Zenject;
 
 namespace Installers
 {
+    [SuppressMessage("ReSharper", "Unity.PerformanceCriticalCodeInvocation")]
     public class LocationInstaller : MonoInstaller
     {
-        [Inject] public PlayerData PlayerData { get; set; }
+        [SerializeField] private Camera _mainCamera;
 
         [Header("Player")]
         [SerializeField] private Transform _playerSpawnPoint;
 
+        private PlayerData _playerData;
+        
+        [Inject]
+        private void Construct(PlayerData playerData)
+        {
+            _playerData = playerData;
+        }
+
         public override void InstallBindings()
         {
+            BindMainCamera();
+            BindInputs();
             BindSignals();
             BindPlayer();
-            BindInputs();
             BindUI();
         }
 
+        private void BindMainCamera()
+        {
+            Container.Bind<Camera>().FromInstance(_mainCamera).AsSingle();
+        }
+        
         private void BindInputs()
         {
-            var tapInput = Container.InstantiatePrefabResourceForComponent<TapInput>(Paths.InputClickHandler);
-            Container.Bind<TapInput>().FromInstance(tapInput).AsSingle();
+            var tapInput = Container.InstantiatePrefabResourceForComponent<RaycastTouchInput>(Paths.InputClickHandler);
+            Container.Bind<ITouchInput>().FromInstance(tapInput).AsSingle();
         }   
 
         private void BindPlayer()
         {
-            var player = Container.InstantiatePrefabForComponent<Player>(PlayerData.PlayerPrefab, _playerSpawnPoint.position, Quaternion.identity, null);
+            var player = Container.InstantiatePrefabForComponent<Player>(_playerData.PlayerPrefab, _playerSpawnPoint.position, Quaternion.identity, null);
 
             Container.Bind<Player>().FromInstance(player).AsSingle();
-            Container.Bind<ITapReceiver>().FromInstance(player.GetComponent<ITapReceiver>());
-            
             Container.Bind<CharacterAnimator>().FromComponentOn(player.gameObject).AsSingle();
             Container.Bind<PlayerInteractionHandler>().FromComponentOn(player.gameObject).AsSingle();
         }
@@ -49,12 +62,9 @@ namespace Installers
             Container.Bind<DeathScreen>().FromInstance(uiRoot.GetComponentInChildren<DeathScreen>());
         }
 
-        public void BindSignals()
+        private void BindSignals()
         {
             SignalBusInstaller.Install(Container);
-
-            Container.DeclareSignal<StopPlayerMovementSignal>();
-            Container.BindSignal<StopPlayerMovementSignal>().ToMethod<PlayerMovement>(movement => movement.StopMovement).FromResolve();
 
             Container.DeclareSignal<ApplyPlayerDamageSignal>();
             Container.BindSignal<ApplyPlayerDamageSignal>().ToMethod<Player>(player => player.ApplyDamage).FromResolve();

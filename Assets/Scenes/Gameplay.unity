@@ -11728,16 +11728,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57949599d9414a445abdfde54f15970f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 522811754}
   _playerSpawnPoint: {fileID: 156026059}
-  userInputPrefab: {fileID: 8553364136847758940, guid: ac3d97219d1c6bb4595400d4d3420162,
-    type: 3}
-  userInputCanvas: {fileID: 0}
-  uiOverlayCanvas: {fileID: 0}
-  playerStatusBarPrefab: {fileID: 2047856151338721362, guid: 194ba768f462cf14395e5be90b5469a8,
-    type: 3}
-  uiDeathScreenCanvas: {fileID: 0}
-  deathScreenPrefab: {fileID: 900567742204255454, guid: 9014f6b6f8814a74c9916cfc9d43ee61,
-    type: 3}
 --- !u!1 &1703863883
 GameObject:
   m_ObjectHideFlags: 0
