@@ -12,7 +12,7 @@ namespace Behaviours.PlayerBehaviours
         private Rigidbody _playerBody;
 
         [Inject]
-        public void Initialize(PlayerModel playerModel)
+        private void Construct(PlayerModel playerModel)
         {
             _playerModel = playerModel;
         }

@@ -10,7 +10,7 @@ namespace Behaviours.PlayerBehaviours
         private SignalBus _signalBus;
 
         [Inject]
-        public void Initialize(PlayerModel playerModel, SignalBus signalBus)
+        private void Construct(PlayerModel playerModel, SignalBus signalBus)
         {
             _playerModel = playerModel;
             _signalBus = signalBus;

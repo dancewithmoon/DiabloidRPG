@@ -12,7 +12,7 @@ namespace UserInput
         private ITapReceiver _tapReceiver;
 
         [Inject]
-        public void Initialize(ITapReceiver tapReceiver)
+        private void Construct(ITapReceiver tapReceiver)
         {
             _mainCamera = Camera.main;
             _tapReceiver = tapReceiver;
