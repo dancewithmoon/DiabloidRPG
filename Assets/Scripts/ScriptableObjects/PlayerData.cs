@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Behaviours.PlayerBehaviours;
+using Model;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -7,9 +8,9 @@ namespace ScriptableObjects
     public class PlayerData : ScriptableObject
     {
         [SerializeField] private PlayerModel _playerModel;
-        [SerializeField] private GameObject _playerPrefab;
+        [SerializeField] private Player _playerPrefab;
         
         public PlayerModel PlayerModel => _playerModel;
-        public GameObject PlayerPrefab => _playerPrefab;
+        public Player PlayerPrefab => _playerPrefab;
     }
 }

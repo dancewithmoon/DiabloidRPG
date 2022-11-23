@@ -1,10 +1,10 @@
-using Behaviours.PlayerBehaviours;
+ using Behaviours.PlayerBehaviours;
 using UnityEngine;
 using Zenject;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] private float cameraSpeed;
+    [SerializeField] private float _cameraSpeed;
     private Transform _player;
 
     [Inject]
@@ -21,7 +21,7 @@ public class CameraMovement : MonoBehaviour
             target.y = transform.position.y;
             target.x += 13;
             target.z += 2;
-            transform.position = Vector3.Lerp(transform.position, target, cameraSpeed * Time.fixedDeltaTime);
+            transform.position = Vector3.Lerp(transform.position, target, _cameraSpeed * Time.fixedDeltaTime);
         }
     }
 

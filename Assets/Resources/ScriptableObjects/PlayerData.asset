@@ -18,5 +18,5 @@ MonoBehaviour:
     _healthCurrent: 100
     _manaMax: 100
     _manaCurrent: 100
-  _playerPrefab: {fileID: 6480854754780271510, guid: b141853385e8d3047b601407f0a9d139,
+  _playerPrefab: {fileID: -1285262038086987290, guid: b141853385e8d3047b601407f0a9d139,
     type: 3}

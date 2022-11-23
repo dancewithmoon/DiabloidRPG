@@ -1,64 +1,38 @@
 using Behaviours.PlayerBehaviours;
 using Constants;
 using Controllers;
-using Model;
 using ScriptableObjects;
 using UnityEngine;
 using UserInput;
+using View.UI;
 using Zenject;
 
 namespace Installers
 {
     public class LocationInstaller : MonoInstaller
     {
+        [Inject] public PlayerData PlayerData { get; set; }
+
         [Header("Player")]
-        public Transform _playerSpawnPoint;
-
-        [Space(5)]
-        [Header("Inputs")]
-        public TapInput userInputPrefab;
-        public Transform userInputCanvas;
-
-        [Space(5)]
-        [Header("UI")]
-        public Transform uiOverlayCanvas;
-        public GameObject playerStatusBarPrefab;
-
-        [Space(5)]
-        [Header("Death Screen")]
-        public Transform uiDeathScreenCanvas;
-        public GameObject deathScreenPrefab;
-
-        private PlayerData _playerData;
-    
+        [SerializeField] private Transform _playerSpawnPoint;
 
         public override void InstallBindings()
         {
-            _playerData = Resources.Load<PlayerData>(Paths.PlayerData);
-
             BindSignals();
-            BindData();
             BindPlayer();
             BindInputs();
             BindUI();
         }
 
-        public void BindData()
+        private void BindInputs()
         {
-            Container.Bind<PlayerModel>().FromInstance(_playerData.PlayerModel);
-        }
-    
-        public void BindInputs()
-        {
-            TapInput raycaster = Container
-                .InstantiatePrefabForComponent<TapInput>(userInputPrefab, userInputCanvas);
-            Container.Bind<TapInput>().FromInstance(raycaster).AsSingle();
+            var tapInput = Container.InstantiatePrefabResourceForComponent<TapInput>(Paths.InputClickHandler);
+            Container.Bind<TapInput>().FromInstance(tapInput).AsSingle();
         }   
 
-        public void BindPlayer()
+        private void BindPlayer()
         {
-            Player player = Container
-                .InstantiatePrefabForComponent<Player>(_playerData.PlayerPrefab, _playerSpawnPoint.position, Quaternion.identity, null);
+            var player = Container.InstantiatePrefabForComponent<Player>(PlayerData.PlayerPrefab, _playerSpawnPoint.position, Quaternion.identity, null);
 
             Container.Bind<Player>().FromInstance(player).AsSingle();
             Container.Bind<ITapReceiver>().FromInstance(player.GetComponent<ITapReceiver>());
@@ -69,11 +43,10 @@ namespace Installers
 
         private void BindUI()
         {
-            PlayerStatusBar statusBar = Container.InstantiatePrefabForComponent<PlayerStatusBar>(playerStatusBarPrefab, uiOverlayCanvas);
-            Container.Bind<HealthPresenter>().FromInstance(statusBar.HealthPresenter).AsSingle();
-
-            DeathScreen deathScreen = Container.InstantiatePrefabForComponent<DeathScreen>(deathScreenPrefab, uiDeathScreenCanvas);
-            Container.Bind<DeathScreen>().FromInstance(deathScreen).AsSingle();
+            var uiRoot = Container.InstantiatePrefabResourceForComponent<UIRoot>(Paths.UiRoot);
+            Container.Bind<UIRoot>().FromInstance(uiRoot).AsSingle();
+            Container.Bind<HealthPresenter>().FromInstance(uiRoot.GetComponentInChildren<HealthPresenter>());
+            Container.Bind<DeathScreen>().FromInstance(uiRoot.GetComponentInChildren<DeathScreen>());
         }
 
         public void BindSignals()
