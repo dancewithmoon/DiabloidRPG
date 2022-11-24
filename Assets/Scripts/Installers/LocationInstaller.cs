@@ -58,19 +58,12 @@ namespace Installers
         {
             var uiRoot = Container.InstantiatePrefabResourceForComponent<UIRoot>(Paths.UiRoot);
             Container.Bind<UIRoot>().FromInstance(uiRoot).AsSingle();
-            Container.Bind<HealthPresenter>().FromInstance(uiRoot.GetComponentInChildren<HealthPresenter>());
-            Container.Bind<DeathScreen>().FromInstance(uiRoot.GetComponentInChildren<DeathScreen>());
+            Container.Bind<DeathScreen>().FromInstance(uiRoot.GetComponentInChildren<DeathScreen>()).AsSingle();
         }
 
         private void BindSignals()
         {
             SignalBusInstaller.Install(Container);
-
-            Container.DeclareSignal<ApplyPlayerDamageSignal>();
-            Container.BindSignal<ApplyPlayerDamageSignal>().ToMethod<Player>(player => player.ApplyDamage).FromResolve();
-
-            Container.DeclareSignal<UpdatePlayerHealthSignal>();
-            Container.BindSignal<UpdatePlayerHealthSignal>().ToMethod<HealthPresenter>(presenter => presenter.UpdateHealth).FromResolve();
 
             Container.DeclareSignal<PlayerDiedSignal>();
             Container.BindSignal<PlayerDiedSignal>().ToMethod<CharacterAnimator>(view => view.Die).FromResolve();

@@ -403,6 +403,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeathScreenSimple
       objectReference: {fileID: 0}
+    - target: {fileID: 900567742204255454, guid: 9014f6b6f8814a74c9916cfc9d43ee61,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5976183166384596367, guid: 9014f6b6f8814a74c9916cfc9d43ee61,
         type: 3}
       propertyPath: m_Pivot.x

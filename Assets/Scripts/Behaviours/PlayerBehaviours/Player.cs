@@ -15,26 +15,11 @@ namespace Behaviours.PlayerBehaviours
             _playerModel = playerModel;
             _signalBus = signalBus;
         }
-    
-        private void Start()
-        {
-            _signalBus.Fire(new UpdatePlayerHealthSignal
-            {
-                healthCurrent = _playerModel.HealthCurrent, 
-                healthMax = _playerModel.HealthMax
-            });
-        }
 
-        public void ApplyDamage(ApplyPlayerDamageSignal signal)
+        public void ApplyDamage(int amount)
         {
-            _playerModel.ApplyDamage(signal.damage);
-        
-            _signalBus.Fire(new UpdatePlayerHealthSignal
-            {
-                healthCurrent = _playerModel.HealthCurrent, 
-                healthMax = _playerModel.HealthMax
-            });
-        
+            _playerModel.ApplyDamage(amount);
+
             if(_playerModel.HealthCurrent <= 0)
             {
                 _signalBus.Fire(new PlayerDiedSignal());

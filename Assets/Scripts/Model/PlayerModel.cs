@@ -18,6 +18,8 @@ namespace Model
         public int ManaMax => _manaMax;
         public int ManaCurrent => _manaCurrent;
 
+        public event Action OnHealthUpdated;
+
         public PlayerModel(float speed, int healthMax, int healthCurrent, int manaMax, int manaCurrent)
         {
             _speed = speed;
@@ -30,11 +32,13 @@ namespace Model
         public void ApplyDamage(int amount)
         {
             _healthCurrent -= amount;
+            OnHealthUpdated?.Invoke();
         }
         
         public void ApplyHealing(int healing)
         {
             _healthCurrent += healing;
+            OnHealthUpdated?.Invoke();
         }
         
         public PlayerModel Clone()
