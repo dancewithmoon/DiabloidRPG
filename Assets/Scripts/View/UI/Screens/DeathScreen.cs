@@ -2,31 +2,35 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(CanvasGroup))]
-public class DeathScreen : MonoBehaviour
+namespace View.UI.Screens
 {
-    private CanvasGroup screen;
-
-    private void Awake()
+    [RequireComponent(typeof(CanvasGroup))]
+    public class DeathScreen : MonoBehaviour
     {
-        screen = GetComponent<CanvasGroup>();
-        screen.alpha = 0;
-    }
+        private CanvasGroup _screen;
 
-    public void Show()
-    {
-        StartCoroutine(ShowScreenCoroutine());
-    }
-
-    private IEnumerator ShowScreenCoroutine()
-    {
-        while(screen.alpha != 1)
+        private void Awake()
         {
-            screen.alpha += Time.deltaTime;
-            yield return null;
+            _screen = GetComponent<CanvasGroup>();
+            _screen.alpha = 0;
         }
-        yield return new WaitForSeconds(1);
-        SceneManager.LoadScene(0);
-    }
 
+        public void Show()
+        {
+            gameObject.SetActive(true);
+            StartCoroutine(ShowScreenCoroutine());
+        }
+
+        private IEnumerator ShowScreenCoroutine()
+        {
+            while(_screen.alpha != 1)
+            {
+                _screen.alpha += Time.deltaTime;
+                yield return null;
+            }
+            yield return new WaitForSeconds(1);
+            SceneManager.LoadScene(0);
+        }
+
+    }
 }

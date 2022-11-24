@@ -19,7 +19,8 @@ namespace Model
         public int ManaCurrent => _manaCurrent;
 
         public event Action OnHealthUpdated;
-
+        public event Action OnPlayerDead;
+        
         public PlayerModel(float speed, int healthMax, int healthCurrent, int manaMax, int manaCurrent)
         {
             _speed = speed;
@@ -33,6 +34,10 @@ namespace Model
         {
             _healthCurrent -= amount;
             OnHealthUpdated?.Invoke();
+            if (_healthCurrent <= 0)
+            {
+                OnPlayerDead?.Invoke();
+            }
         }
         
         public void ApplyHealing(int healing)

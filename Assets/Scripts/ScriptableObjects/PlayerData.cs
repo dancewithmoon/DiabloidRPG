@@ -10,7 +10,7 @@ namespace ScriptableObjects
         [SerializeField] private PlayerModel _playerModel;
         [SerializeField] private Player _playerPrefab;
         
-        public PlayerModel PlayerModel => _playerModel;
+        public PlayerModel PlayerModel => _playerModel.Clone();
         public Player PlayerPrefab => _playerPrefab;
     }
 }

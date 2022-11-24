@@ -19,11 +19,6 @@ namespace Behaviours.PlayerBehaviours
         public void ApplyDamage(int amount)
         {
             _playerModel.ApplyDamage(amount);
-
-            if(_playerModel.HealthCurrent <= 0)
-            {
-                _signalBus.Fire(new PlayerDiedSignal());
-            }
         }
 
         public void ApplyHealing(int healing)

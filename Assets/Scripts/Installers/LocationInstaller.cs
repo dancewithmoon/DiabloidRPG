@@ -5,6 +5,7 @@ using ScriptableObjects;
 using UnityEngine;
 using UserInput;
 using View.UI;
+using View.UI.Screens;
 using Zenject;
 
 namespace Installers
@@ -29,7 +30,6 @@ namespace Installers
         {
             BindMainCamera();
             BindInputs();
-            BindSignals();
             BindPlayer();
             BindUI();
         }
@@ -59,15 +59,6 @@ namespace Installers
             var uiRoot = Container.InstantiatePrefabResourceForComponent<UIRoot>(Paths.UiRoot);
             Container.Bind<UIRoot>().FromInstance(uiRoot).AsSingle();
             Container.Bind<DeathScreen>().FromInstance(uiRoot.GetComponentInChildren<DeathScreen>()).AsSingle();
-        }
-
-        private void BindSignals()
-        {
-            SignalBusInstaller.Install(Container);
-
-            Container.DeclareSignal<PlayerDiedSignal>();
-            Container.BindSignal<PlayerDiedSignal>().ToMethod<CharacterAnimator>(view => view.Die).FromResolve();
-            Container.BindSignal<PlayerDiedSignal>().ToMethod<DeathScreen>(deathScreen => deathScreen.Show).FromResolve();
         }
     }
 }
