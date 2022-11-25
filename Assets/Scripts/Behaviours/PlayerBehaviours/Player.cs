@@ -7,13 +7,11 @@ namespace Behaviours.PlayerBehaviours
     public class Player : MonoBehaviour
     {
         private PlayerModel _playerModel;
-        private SignalBus _signalBus;
-
+        
         [Inject]
-        private void Construct(PlayerModel playerModel, SignalBus signalBus)
+        private void Construct(PlayerModel playerModel)
         {
             _playerModel = playerModel;
-            _signalBus = signalBus;
         }
 
         public void ApplyDamage(int amount)
